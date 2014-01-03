@@ -119,6 +119,24 @@ func TestStdlibInterfaces(t *testing.T) {
 	assert.Equal(t, val, val2) // stable
 }
 
+func TestSimplejsonStringToNumber(t *testing.T) {
+	var err error
+
+	js, err := NewJson([]byte(`{ 
+		"testInt": "10",
+		"testFloat": "12.50"
+	}`))
+
+	assert.NotEqual(t, nil, js)
+	assert.Equal(t, nil, err)
+
+	n, _ := js.Get("testInt").Int()
+	assert.Equal(t, 10, n)
+
+	f, _ := js.Get("testFloat").Float64()
+	assert.Equal(t, 12.50, f)
+}
+
 func TestSimplejsonGo11(t *testing.T) {
 	js, err := NewJson([]byte(`{ 
 		"test": { 

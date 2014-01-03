@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"log"
+	"strconv"
 )
 
 // returns the current implementation version
@@ -352,6 +353,11 @@ func (j *Json) Float64() (float64, error) {
 	if f, ok := (j.data).(float64); ok {
 		return f, nil
 	}
+	if s, ok := (j.data).(string); ok {
+		if f, e := strconv.ParseFloat(s, 64); e == nil {
+			return f, nil
+		}
+	}
 	return -1, errors.New("type assertion to json.Number failed")
 }
 
@@ -364,6 +370,11 @@ func (j *Json) Int() (int, error) {
 	if f, ok := (j.data).(float64); ok {
 		return int(f), nil
 	}
+	if s, ok := (j.data).(string); ok {
+		if i, e := strconv.Atoi(s); e == nil {
+			return i, nil
+		}
+	}
 	return -1, errors.New("type assertion to json.Number failed")
 }
 
@@ -374,6 +385,11 @@ func (j *Json) Int64() (int64, error) {
 	}
 	if f, ok := (j.data).(float64); ok {
 		return int64(f), nil
+	}
+	if s, ok := (j.data).(string); ok {
+		if i, e := strconv.ParseInt(s, 10, 64); e == nil {
+			return i, nil
+		}
 	}
 	return -1, errors.New("type assertion to json.Number failed")
 }
